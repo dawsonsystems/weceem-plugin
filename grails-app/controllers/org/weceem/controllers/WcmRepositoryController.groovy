@@ -68,7 +68,7 @@ class WcmRepositoryController {
             }
             def space = wcmContentRepositoryService.findDefaultSpace()
             if (log.debugEnabled) {
-                log.debug "Using default space: ${space.name}"
+                log.warn "Using default space: ${space.name}"
             }
             // Redirect to ourselves with the correct link for default dspace
             redirect(controller:controllerName, action:actionName, params:[space:space.name])

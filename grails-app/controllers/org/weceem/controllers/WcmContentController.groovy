@@ -54,9 +54,19 @@ class WcmContentController {
                 log.debug "Content request for uri: ${params.uri}"
             }
 
-            def info = wcmContentRepositoryService.resolveSpaceAndURI(params.uri)
-            def space = info.space
-            def uri = info.uri
+            def space = null
+            def uri = null
+            if (request.space) {
+            //rely on our hacked filter
+              def info = wcmContentRepositoryService.resolveSpaceAndURI(params.uri)
+              space = request.space
+              uri = info.uri
+            } else {
+              def info = wcmContentRepositoryService.resolveSpaceAndURI(params.uri)
+              space = info.space
+              uri = info.uri
+            }
+
 
             if (log.debugEnabled) {
                 log.debug "Loading content from space: ${space?.name}"
