@@ -9,6 +9,7 @@ grails.project.dependency.resolution = {
 	repositories {        
 		grailsPlugins()
 		grailsHome()
+    mavenRepo "http://download.java.net/maven/2/"
 		grailsCentral()
         flatDir dirs:"lib" // need this for iText
     }
