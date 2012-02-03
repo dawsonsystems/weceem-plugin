@@ -16,8 +16,8 @@ grails.project.dependency.resolution = {
     
     dependencies {
         // Workarounds for Grails 1.2 not shipping ant in WAR
-        compile 'org.apache.ant:ant:1.7.1'
-        compile 'org.apache.ant:ant-launcher:1.7.1'
+    //    compile 'org.apache.ant:ant:1.7.1'
+    //    compile 'org.apache.ant:ant-launcher:1.7.1'
 
         // Our specific dependencies
         compile 'net.java.dev.textile-j:textile-j:2.2.864'

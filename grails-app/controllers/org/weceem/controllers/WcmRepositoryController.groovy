@@ -119,8 +119,15 @@ class WcmRepositoryController {
                 def dcInst = domainClass.newInstance()
                 haveChildren.put(domainClass.name, wcmContentRepositoryService.triggerDomainEvent(dcInst, WeceemDomainEvents.contentShouldAcceptChildren))
             }
+
+            def spaces = WcmSpace.listOrderByName()
+
+            if (params.spaces) {
+              spaces = params.spaces
+            }
+
             return [content:nodes, contentTypes:wcmContentRepositoryService.listContentClassNames(), 
-                'haveChildren':haveChildren, space: params.space, spaces: WcmSpace.listOrderByName() ]
+                'haveChildren':haveChildren, space: params.space, spaces: spaces ]
         } else {
             flash.message = 'message.there.are.no.spaces'
             redirect(controller:'wcmSpace')
