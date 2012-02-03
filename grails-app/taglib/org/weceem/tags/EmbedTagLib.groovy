@@ -35,9 +35,15 @@ class EmbedTagLib {
         if (!path) {
             throwTagError "No [path] attribute supplied to wcm:render tag. Specify the Weceem content URI that you wish to render"
         }
+
+        def space = request.space
+
         def uriInfo = wcmContentRepositoryService.resolveSpaceAndURI(path)
+        if (!space) {
+          space = uriInfo.space
+        }
         // @todo enhance the logic to work same as WcmContentController
-        def node = wcmContentRepositoryService.findContentForPath(uriInfo.uri, uriInfo.space)
+        def node = wcmContentRepositoryService.findContentForPath(uriInfo.uri, space)
         if (node) {
             // @todo Should verify it is embeddable content type here i.e. images/downloads can't embed!
             out << g.include(controller:'wcmContent', action:'show', params:[uri:path])
