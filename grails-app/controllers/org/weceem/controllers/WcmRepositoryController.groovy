@@ -122,8 +122,9 @@ class WcmRepositoryController {
 
             def spaces = WcmSpace.listOrderByName()
 
-            if (params.spaces) {
-              spaces = params.spaces
+            if (request.spaces != null) {
+              println "Space override received ${request.spaces}"
+              spaces = request.spaces
             }
 
             return [content:nodes, contentTypes:wcmContentRepositoryService.listContentClassNames(), 
