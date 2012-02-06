@@ -274,10 +274,10 @@ class WcmContentRepositoryService implements InitializingBean {
      * Note, this is perhaps one of our most evil pieces of logic. Enter at your peril.
      * @return A map with "space" and "uri" values, with the space resolved to a WcmSpace and uri amended
      */
-    Map resolveSpaceAndURI(String uri) {
+    Map resolveSpaceAndURI(String uri, def space = null) {
+
         def spaceName
-        def space
-        
+
         // This is pretty horrible stuff. Beware.
         if (uri?.startsWith('/')) {
             if (uri.length() > 1) {
@@ -295,51 +295,53 @@ class WcmContentRepositoryService implements InitializingBean {
                 uri = ''
             }
         }
-        
-        // Let's try to find the space, or page in the root space
-        if (!spaceName) {
-            if (log.debugEnabled) {
-                log.debug "WcmContent request for no space, looking for space with blank aliasURI"
-            }
-            space = findSpaceByURI('')
-            if (!space) {
-                if (log.debugEnabled) {
-                    log.debug "WcmContent request for no space, looking for any space, none with blank aliasURI"
-                }
-                space = findDefaultSpace()
-            }
-        } else {
-            if (log.debugEnabled) {
-                log.debug "Content request for space with alias: ${spaceName}"
-            }
-            space = findSpaceByURI(spaceName)
+        if (!space) {
+          // Let's try to find the space, or page in the root space
+          if (!spaceName) {
+              if (log.debugEnabled) {
+                  log.debug "WcmContent request for no space, looking for space with blank aliasURI"
+              }
+              space = findSpaceByURI('')
+              if (!space) {
+                  if (log.debugEnabled) {
+                      log.debug "WcmContent request for no space, looking for any space, none with blank aliasURI"
+                  }
+                  space = findDefaultSpace()
+              }
+          } else {
+              if (log.debugEnabled) {
+                  log.debug "Content request for space with alias: ${spaceName}"
+              }
+              space = findSpaceByURI(spaceName)
 
-            // Check for case where requesting a doc that is in a space mapped to uri ""
-            if (space == null) {
-                if (log.debugEnabled) {
-                    log.debug "WcmContent request has no space found in database, looking for space with blank aliasURI to see if doc is there"
-                }
-                space = findSpaceByURI('')
-                if (space) {
-                    // put the space name back into uri
-                    if (spaceName) {
-                        uri = spaceName + '/' + uri
-                    }
-                    spaceName = ''
-                    uri = uri ? (spaceName ? spaceName + '/' : '') + uri : spaceName
-                    if (log.debugEnabled) {
-                        log.debug "Content request has found space with blank aliasURI, amending uri to include the space name: ${uri}"
-                    }
-                }
-            }
-        }        
+              // Check for case where requesting a doc that is in a space mapped to uri ""
+              if (space == null) {
+                  if (log.debugEnabled) {
+                      log.debug "WcmContent request has no space found in database, looking for space with blank aliasURI to see if doc is there"
+                  }
+                  space = findSpaceByURI('')
+                  if (space) {
+                      // put the space name back into uri
+                      if (spaceName) {
+                          uri = spaceName + '/' + uri
+                      }
+                      spaceName = ''
+                      uri = uri ? (spaceName ? spaceName + '/' : '') + uri : spaceName
+                      if (log.debugEnabled) {
+                          log.debug "Content request has found space with blank aliasURI, amending uri to include the space name: ${uri}"
+                      }
+                  }
+              }
+          }
+        }
 
         if (uri == null) {
             uri = ''
         }
-        
+
         [space:space, uri:uri]
     }
+
     
     String getSpaceTemplateLocationByName(String name) {
         spaceTemplates[name]
