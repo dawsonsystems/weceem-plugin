@@ -63,6 +63,9 @@ class WcmContentController {
               if (uri?.contains(space.aliasURI)) {
                 uri = uri.substring(space.aliasURI.length() + 1)
               }
+              if (!uri) {
+                uri = ''
+              }
             } else {
               def info = wcmContentRepositoryService.resolveSpaceAndURI(params.uri)
               space = info.space
